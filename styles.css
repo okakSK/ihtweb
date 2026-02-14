@@ -1,0 +1,294 @@
+/* --- ПЕРЕМЕННЫЕ --- */
+:root {
+    --bg-color: #0f0f0f; /* Чуть светлее черного для глубины */
+    --text-color: #ffffff;
+    --hint-color: #8e8e93;
+    --accent-color: #2481cc;
+
+    /* Настройки стекла (Dark) */
+    --glass-bg: rgba(30, 30, 30, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+
+    --nav-height: 70px;
+}
+
+body.light-mode {
+    --bg-color: #f2f2f7;
+    --text-color: #000000;
+    --hint-color: #636366;
+    --accent-color: #007aff;
+
+    /* Настройки стекла (Light) */
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(0, 0, 0, 0.05);
+    --card-bg: #ffffff;
+    --shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* --- ОСНОВНОЕ --- */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding-bottom: 110px; /* Место для меню снизу */
+    padding-top: 5px;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* --- КНОПКА ТЕМЫ (ПЛАВАЮЩАЯ) --- */
+.theme-toggle {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    z-index: 2000;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.theme-toggle:active { transform: scale(0.9); }
+
+/* --- GLASS TOOLBAR (ВЕРХНИЕ ПАНЕЛИ) --- */
+/* Это новый дизайн для кнопок 3/5/7 и фильтров книг */
+.glass-toolbar {
+    position: sticky; /* Прилипает к верху */
+    top: 15px;
+    z-index: 100;
+
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    width: fit-content; /* Ширина по содержимому */
+    margin: 0 auto 15px auto; /* Центрирование */
+    padding: 6px;
+
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 20px; /* Форма пилюли */
+    box-shadow: var(--shadow);
+}
+
+.view-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    padding: 8px 16px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 0.6;
+}
+
+.view-btn.active {
+    background: var(--accent-color);
+    color: #fff;
+    opacity: 1;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+/* --- СЕТКА ГАЛЕРЕИ --- */
+.gallery-grid {
+    display: grid;
+    gap: 2px;
+    padding: 0 2px;
+    transition: all 0.3s ease;
+    /* Чтобы не дергалось при загрузке */
+    min-height: 50vh;
+}
+
+/* Режимы колонок */
+.gallery-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.gallery-grid.cols-5 { grid-template-columns: repeat(5, 1fr); }
+.gallery-grid.cols-7 { grid-template-columns: repeat(7, 1fr); }
+
+.gallery-item {
+    aspect-ratio: 1/1;
+    position: relative;
+    background: var(--card-bg);
+    overflow: hidden;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0; /* Скрыто до загрузки */
+}
+
+.gallery-item img.loaded {
+    opacity: 1;
+}
+
+.gallery-item:active img {
+    transform: scale(0.96);
+}
+
+/* --- КАРТОЧКИ КНИГ --- */
+.book-card {
+    display: block;
+    margin: 10px 15px;
+    padding: 18px;
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.1s;
+}
+.book-card:active { transform: scale(0.98); }
+
+/* --- НИЖНЯЯ НАВИГАЦИЯ --- */
+.glass-nav {
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    height: var(--nav-height);
+
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-radius: 28px;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: var(--shadow);
+}
+
+.nav-item {
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--hint-color);
+    flex: 1;
+    height: 100%;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-item .icon { font-size: 24px; margin-bottom: 4px; transition: transform 0.2s; }
+.nav-item .label { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; }
+
+.nav-item.active { color: var(--text-color); }
+.nav-item.active .icon { transform: translateY(-3px); color: var(--accent-color); }
+
+.filter-bar {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--glass-border);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+}
+
+.pswp-like-btn {
+    background: rgba(0,0,0,0.6);
+    border-radius: 50%;
+    border: none;
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+    color: white;
+}
+
+.pswp-like-btn.liked {
+    background: red;
+}
+
+
+.info-btn {
+    padding: 10px 20px;
+    border: none;
+    background: #6a5acd;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.info-block {
+    background: #111;
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 15px;
+    max-width: 600px;
+}
+
+.info-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.tg-btn {
+    background: #229ED9;
+    border: none;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.admin-btn {
+    background: #00c853;
+    border: none;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+hr {
+    margin: 15px 0;
+    border: 0;
+    height: 1px;
+    background: #444;
+}
+
+.copyright {
+    font-size: 12px;
+    opacity: 0.6;
+    text-align: center;
+}
+
+/* Анимация появления контента */
+.fade-in { animation: fadeIn 0.4s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
